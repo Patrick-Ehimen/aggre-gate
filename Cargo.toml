@@ -1,0 +1,10 @@
+[workspace]
+members = [
+    "aggregator-core",
+    "exchange-connectors",
+    "orderbook-implementations", 
+    "server-implementations",
+    "analysis-tools",
+    "cli-tools",
+    "benchmarks"
+]
