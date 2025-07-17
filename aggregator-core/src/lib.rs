@@ -1,14 +1,11 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! Core types and traits for cryptocurrency orderbook aggregation
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+pub mod aggregator;
+pub mod config;
+pub mod error;
+pub mod types;
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use aggregator::*;
+pub use config::*;
+pub use error::*;
+pub use types::*;

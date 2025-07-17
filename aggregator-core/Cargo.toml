@@ -1,6 +1,19 @@
 [package]
 name = "aggregator-core"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Core aggregation logic for cryptocurrency orderbook data"
 
 [dependencies]
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+url = {workspace = true}
+uuid = { workspace = true }
+reqwest = {workspace = true}
+chrono = {workspace = true}
+tungstenite = {workspace = true}
