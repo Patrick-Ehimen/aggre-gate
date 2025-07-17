@@ -1,4 +1,5 @@
 [workspace]
+resolver = "3"
 members = [
     "aggregator-core",
     "exchange-connectors",
@@ -8,3 +9,11 @@ members = [
     "cli-tools",
     "benchmarks"
 ]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["0xOse 0xoepatrick@gmail.com"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/patrick-ehimen/aggregate"
+description = "A comprehensive cryptocurrency orderbook aggregation platform"
