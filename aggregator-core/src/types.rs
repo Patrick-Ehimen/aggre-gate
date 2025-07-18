@@ -170,6 +170,20 @@ pub struct Ask {
     pub timestamp: DateTime<Utc>,
 }
 
+/// Implements partial ordering for the `Ask` type based on price.
+///
+/// Lower prices are considered better for asks, so this implementation
+/// compares the `price` fields of two `Ask` instances using their
+/// `partial_cmp` method.
+///
+/// # Arguments
+///
+/// * `other` - Another `Ask` instance to compare with.
+///
+/// # Returns
+///
+/// An `Option<std::cmp::Ordering>` indicating the ordering between
+/// `self` and `other` based on their prices.
 impl PartialOrd for Ask {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         // Lower price is better for asks
@@ -177,6 +191,16 @@ impl PartialOrd for Ask {
     }
 }
 
+/// Implements the `Ord` trait for the `Ask` type, allowing for total ordering comparisons.
+///
+/// This implementation delegates to the `partial_cmp` method and returns `Ordering::Equal`
+/// if the comparison is not possible (i.e., if either value is NaN or otherwise not comparable).
+/// This is useful for sorting or ordering collections of `Ask` values.
+///
+/// # Panics
+///
+/// This implementation does not panic, but it may return `Ordering::Equal` for values that
+/// are not strictly equal if `partial_cmp` returns `None`.
 impl Ord for Ask {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.partial_cmp(other).unwrap_or(std::cmp::Ordering::Equal)
@@ -185,6 +209,15 @@ impl Ord for Ask {
 
 impl Eq for Ask {}
 
+/// Provides a default implementation for the `Ask` struct.
+///
+/// The default `Ask` has:
+/// - `price` set to the maximum possible `f64` value,
+/// - `quantity` set to `0.0`,
+/// - `exchange` set to `Exchange::Binance`,
+/// - `timestamp` set to the current UTC time.
+///
+/// This is useful for initializing an `Ask` with placeholder or sentinel values.
 impl Default for Ask {
     fn default() -> Self {
         Ask {
@@ -196,6 +229,18 @@ impl Default for Ask {
     }
 }
 
+/// Represents an update to the price levels for a specific trading symbol on a given exchange.
+///
+/// This struct contains the latest bid and ask levels, along with metadata such as the update's unique identifier,
+/// the symbol being updated, the exchange, and the timestamp of the update.
+///
+/// # Fields
+/// - `id`: Unique identifier for this price level update.
+/// - `symbol`: The trading symbol (e.g., "BTCUSD") for which the price levels are updated.
+/// - `exchange`: The exchange where the price levels are sourced from.
+/// - `bids`: A vector of bid levels, representing buy orders.
+/// - `asks`: A vector of ask levels, representing sell orders.
+/// - `timestamp`: The time at which this update was generated.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PriceLevelUpdate {
     pub id: Uuid,
@@ -206,6 +251,14 @@ pub struct PriceLevelUpdate {
     pub timestamp: DateTime<Utc>,
 }
 
+/// Represents a summary of market data for a specific trading symbol.
+///
+/// # Fields
+/// - `symbol`: The trading symbol (e.g., "BTCUSD") associated with this summary.
+/// - `spread`: The difference between the best ask and best bid prices.
+/// - `bids`: A list of bid price levels, typically sorted by price descending.
+/// - `asks`: A list of ask price levels, typically sorted by price ascending.
+/// - `timestamp`: The UTC timestamp indicating when this summary was generated
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Summary {
     pub symbol: String,
@@ -216,11 +269,35 @@ pub struct Summary {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+/// Represents a trading pair consisting of a base and a quote asset.
+///
+/// # Fields
+/// - `base`: The symbol of the base asset (e.g., "BTC").
+/// - `quote`: The symbol of the quote asset (e.g., "USD").
+///
+/// # Example
+/// let pair = TradingPair {
+///     base: "BTC".to_string(),
+///     quote: "USD".to_string(),
+/// };
 pub struct TradingPair {
     pub base: String,
     pub quote: String,
 }
 
+/// Creates a new `TradingPair` instance with the given base and quote currencies.
+///
+/// # Arguments
+///
+/// * `base` - A string slice that holds the base currency symbol.
+/// * `quote` - A string slice that holds the quote currency symbol.
+///
+/// # Returns
+///
+/// A `TradingPair` with both `base` and `quote` converted to uppercase.
+/// let pair = TradingPair::new("btc", "usd");
+/// assert_eq!(pair.base, "BTC");
+/// assert_eq!(pair.quote, "USD");
 impl TradingPair {
     pub fn new(base: &str, quote: &str) -> Self {
         Self {
@@ -230,12 +307,28 @@ impl TradingPair {
     }
 }
 
+/// Implements the `fmt::Display` trait for the `TradingPair` struct,
+/// allowing it to be formatted as a string in the form "BASE/QUOTE".
+/// This enables easy and human-readable printing of trading pairs,
+/// such as "BTC/USD" or "ETH/EUR".
 impl fmt::Display for TradingPair {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}/{}", self.base, self.quote)
     }
 }
 
+/// Implements the `FromStr` trait for the `TradingPair` type, allowing it to be created from a string representation.
+///
+/// # Format
+/// Expects the input string to be in the format `"BASE/QUOTE"`, where `BASE` and `QUOTE` are the trading pair symbols.
+///
+/// # Errors
+/// Returns an `AggregatorError::Parsing` if the input string does not contain exactly one '/' separator or does not conform to the expected format.
+///
+/// # Examples
+/// use std::str::FromStr;
+/// let pair = TradingPair::from_str("BTC/USDT");
+/// assert!(pair.is_ok());
 impl FromStr for TradingPair {
     type Err = crate::AggregatorError;
 
