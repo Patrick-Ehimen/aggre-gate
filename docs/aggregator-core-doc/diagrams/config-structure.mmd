@@ -1,0 +1,37 @@
+```mermaid
+graph TD
+    Root[Configuration Root] --> App[Application Config]
+    Root --> DB[Database Config]
+    Root --> API[API Config]
+    Root --> Log[Logging Config]
+    
+    App --> AppName[app.name]
+    App --> AppVersion[app.version]
+    App --> AppEnv[app.environment]
+    
+    DB --> DBHost[db.host]
+    DB --> DBPort[db.port]
+    DB --> DBName[db.name]
+    DB --> DBCreds[db.credentials]
+    
+    API --> APIEndpoint[api.endpoint]
+    API --> APITimeout[api.timeout]
+    API --> APIRetries[api.retries]
+    API --> APIKeys[api.keys]
+    
+    Log --> LogLevel[log.level]
+    Log --> LogFormat[log.format]
+    Log --> LogOutput[log.output]
+    
+    subgraph "Configuration Sources"
+        ENV[Environment Variables]
+        FILE[Configuration Files]
+        CLI[Command Line Args]
+        DEFAULT[Default Values]
+    end
+    
+    Root --> ENV
+    Root --> FILE
+    Root --> CLI
+    Root --> DEFAULT
+```

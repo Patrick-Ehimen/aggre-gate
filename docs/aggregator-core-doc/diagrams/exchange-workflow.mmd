@@ -1,0 +1,33 @@
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Aggregator
+    participant Config
+    participant Exchange
+    participant Error
+    
+    Client->>Aggregator: Initialize
+    Aggregator->>Config: Load Configuration
+    Config-->>Aggregator: Configuration Data
+    
+    Client->>Aggregator: Request Data
+    Aggregator->>Exchange: Connect
+    
+    alt Connection Success
+        Exchange-->>Aggregator: Connection Established
+        Aggregator->>Exchange: Send Request
+        Exchange-->>Aggregator: Response Data
+        Aggregator->>Aggregator: Process Data
+        Aggregator-->>Client: Return Results
+    else Connection Error
+        Exchange-->>Aggregator: Connection Failed
+        Aggregator->>Error: Handle Error
+        Error->>Error: Log Error
+        Error-->>Aggregator: Error Response
+        Aggregator-->>Client: Return Error
+    end
+    
+    Client->>Aggregator: Cleanup
+    Aggregator->>Exchange: Disconnect
+    Exchange-->>Aggregator: Disconnected
+```

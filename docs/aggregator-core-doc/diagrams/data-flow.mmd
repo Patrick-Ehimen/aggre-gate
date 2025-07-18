@@ -1,0 +1,23 @@
+```mermaid
+flowchart LR
+    Input[Input Data] --> Validate{Validate}
+    Validate -->|Valid| Transform[Transform Data]
+    Validate -->|Invalid| Error[Error Handler]
+    
+    Transform --> Aggregate[Aggregate Data]
+    Aggregate --> Process[Process Results]
+    Process --> Output[Output Data]
+    
+    Error --> Log[Log Error]
+    Error --> Retry{Retry?}
+    Retry -->|Yes| Transform
+    Retry -->|No| Fail[Fail]
+    
+    subgraph "Configuration"
+        Config[Config Module]
+    end
+    
+    Config --> Validate
+    Config --> Transform
+    Config --> Aggregate
+```

@@ -1,0 +1,30 @@
+```mermaid
+graph TB
+    subgraph "Aggregator Core"
+        A[Aggregator Module] --> C[Config Module]
+        A --> E[Error Module]
+        A --> T[Types Module]
+        A --> L[Lib Module]
+        
+        C --> E
+        T --> E
+        L --> T
+    end
+    
+    subgraph "External Dependencies"
+        API[External APIs]
+        DB[Database]
+        FS[File System]
+    end
+    
+    A --> API
+    C --> FS
+    A --> DB
+    
+    subgraph "Application Layer"
+        APP[Application]
+    end
+    
+    APP --> A
+    APP --> C
+```

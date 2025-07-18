@@ -1,0 +1,33 @@
+```mermaid
+flowchart TD
+    Start[Operation Start] --> Execute[Execute Operation]
+    Execute --> Success{Success?}
+    
+    Success -->|Yes| Complete[Operation Complete]
+    Success -->|No| Classify[Classify Error]
+    
+    Classify --> Retryable{Retryable?}
+    Retryable -->|Yes| Retry[Retry Operation]
+    Retryable -->|No| Fatal[Fatal Error]
+    
+    Retry --> Backoff[Apply Backoff]
+    Backoff --> MaxRetries{Max Retries?}
+    MaxRetries -->|No| Execute
+    MaxRetries -->|Yes| Fatal
+    
+    Fatal --> Log[Log Error]
+    Log --> Notify[Notify Handler]
+    Notify --> Fail[Operation Failed]
+    
+    subgraph "Error Types"
+        ValidationError[Validation Error]
+        NetworkError[Network Error]
+        ConfigError[Config Error]
+        SystemError[System Error]
+    end
+    
+    Classify --> ValidationError
+    Classify --> NetworkError
+    Classify --> ConfigError
+    Classify --> SystemError
+```

@@ -1,0 +1,46 @@
+```mermaid
+classDiagram
+    class Aggregator {
+        +aggregate(data)
+        +configure(config)
+        +process()
+        +getResults()
+    }
+    
+    class Config {
+        +load(source)
+        +validate()
+        +get(key)
+        +set(key, value)
+    }
+    
+    class Error {
+        +handle(error)
+        +log(message)
+        +retry(operation)
+        +classify(error)
+    }
+    
+    class Types {
+        +DataType
+        +ConfigType
+        +ErrorType
+        +ResultType
+    }
+    
+    class Lib {
+        +utils()
+        +helpers()
+        +validators()
+        +transformers()
+    }
+    
+    Aggregator --> Config
+    Aggregator --> Error
+    Aggregator --> Types
+    Aggregator --> Lib
+    Config --> Error
+    Config --> Types
+    Error --> Types
+    Lib --> Types
+```
