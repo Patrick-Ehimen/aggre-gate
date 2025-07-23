@@ -34,9 +34,7 @@ pub struct DefaultAnalysisEngine;
 ///
 /// # Examples
 ///
-/// ```
 /// let engine = DefaultAnalysisEngine::new();
-/// ```
 impl DefaultAnalysisEngine {
     pub fn new() -> Self {
         Self
@@ -75,12 +73,10 @@ impl DefaultAnalysisEngine {
 ///
 /// # Example
 ///
-/// ```rust
 /// let engine = DefaultAnalysisEngine::new();
 /// let opportunities = engine.analyze_summaries(&summaries).await?;
 /// let spread = engine.calculate_spread(&summary).await;
 /// let vwap = engine.calculate_volume_weighted_price(&summary).await;
-/// ```
 impl AnalysisEngine for DefaultAnalysisEngine {
     async fn analyze_summaries(
         &self,
