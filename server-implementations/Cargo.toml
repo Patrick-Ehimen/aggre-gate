@@ -1,6 +1,46 @@
 [package]
 name = "server-implementations"
-version = "0.1.0"
-edition = "2024"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Server implementations for gRPC, REST, WebSocket servers"
+
+[features]
+default = ["rest", "websocket"]
+grpc = ["tonic", "prost", "tonic-build", "async-stream"]
+rest = ["axum", "tower", "tower-http", "hyper"]
+websocket = ["tokio-tungstenite", "futures-util"]
 
 [dependencies]
+aggregator-core = { path = "../aggregator-core" }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+async-trait = { workspace = true }
+# gRPC dependencies
+tonic = { workspace = true, optional = true }
+prost = { workspace = true, optional = true }
+async-stream = { version = "0.3", optional = true }
+
+# REST dependencies
+axum = { version = "0.7", optional = true }
+tower = { version = "0.4", optional = true }
+tower-http = { version = "0.5", features = ["cors"], optional = true }
+hyper = { version = "1.0", features = ["full"], optional = true }
+
+# WebSocket dependencies
+tokio-tungstenite = { workspace = true, optional = true }
+futures-util = { workspace = true, optional = true }
+
+# Common dependencies
+tokio-stream = "0.1"
+futures = "0.3"
+once_cell = { workspace = true }
+
+[build-dependencies]
+tonic-build = { version = "0.10", optional = true }

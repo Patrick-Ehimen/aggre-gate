@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package orderbook_service;
+
+// OrderBook service definition
+service OrderbookService {
+    // Get summary for a specific trading pair
+    rpc GetSummary(GetSummaryRequest) returns (GetSummaryResponse);
+    
+    // Get all summaries
+    rpc GetAllSummaries(GetAllSummariesRequest) returns (GetAllSummariesResponse);
+    
+    // Stream summaries
+    rpc StreamSummaries(StreamSummariesRequest) returns (stream SummaryMessage);
+    
+    // Stream arbitrage opportunities
+    rpc StreamArbitrage(StreamArbitrageRequest) returns (stream ArbitrageMessage);
+    
+    // Get health status
+    rpc GetHealthStatus(GetHealthStatusRequest) returns (GetHealthStatusResponse);
+    
+    // Get metrics
+    rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse);
+}
+
+// Request messages
+message GetSummaryRequest {
+    string base = 1;
+    string quote = 2;
+}
+
+message GetAllSummariesRequest {}
+
+message StreamSummariesRequest {}
+
+message StreamArbitrageRequest {}
+
+message GetHealthStatusRequest {
+    string exchange = 1;
+}
+
+message GetMetricsRequest {
+    string exchange = 1;
+}
+
+// Response messages
+message GetSummaryResponse {
+    SummaryMessage summary = 1;
+}
+
+message GetAllSummariesResponse {
+    repeated SummaryMessage summaries = 1;
+}
+
+message GetHealthStatusResponse {
+    HealthStatusMessage health_status = 1;
+}
+
+message GetMetricsResponse {
+    MetricsMessage metrics = 1;
+}
+
+// Data structures
+message SummaryMessage {
+    string symbol = 1;
+    double spread = 2;
+    repeated PriceLevel bids = 3;
+    repeated PriceLevel asks = 4;
+    int64 timestamp = 5;
+}
+
+message PriceLevel {
+    double price = 1;
+    double quantity = 2;
+    string exchange = 3;
+    int64 timestamp = 4;
+}
+
+message ArbitrageMessage {
+    string buy_exchange = 1;
+    string sell_exchange = 2;
+    string symbol = 3;
+    double buy_price = 4;
+    double sell_price = 5;
+    double profit_percentage = 6;
+    double volume = 7;
+    int64 timestamp = 8;
+}
+
+message HealthStatusMessage {
+    string exchange = 1;
+    bool is_healthy = 2;
+    int64 last_update = 3;
+    string error_message = 4;
+}
+
+message MetricsMessage {
+    string exchange = 1;
+    string symbol = 2;
+    double updates_per_second = 3;
+    double latency_ms = 4;
+    uint64 error_count = 5;
+    int64 last_update = 6;
+}
