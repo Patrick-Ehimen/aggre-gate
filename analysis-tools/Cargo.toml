@@ -7,6 +7,7 @@ license.workspace = true
 repository.workspace = true
 description = "Analysis tools for arbitrage detection and market analytics"
 
+
 [dependencies]
 aggregator-core = { path = "../aggregator-core" }
 tokio = { workspace = true }
@@ -18,3 +19,6 @@ tracing = { workspace = true }
 async-trait = { workspace = true }
 uuid = { workspace = true }
 chrono = { workspace = true }
+
+[dev-dependencies]
+futures = "0.3"
