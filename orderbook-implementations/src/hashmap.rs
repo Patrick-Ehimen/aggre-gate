@@ -77,13 +77,15 @@ impl OrderBook for HashMapOrderBook {
         }
 
         // Trim to max depth by removing lowest prices
-        if bid_map.len() > max_depth {
+        if max_depth == 0 {
+            bid_map.clear();
+        } else if bid_map.len() > max_depth {
             let mut prices: Vec<f64> = bid_map.values().map(|b| b.price).collect();
             prices.sort_by(|a, b| b.partial_cmp(a).unwrap_or(std::cmp::Ordering::Equal));
             prices.truncate(max_depth);
-            let min_price = prices.last().copied().unwrap_or(0.0);
-
-            bid_map.retain(|_, bid| bid.price >= min_price);
+            if let Some(min_price) = prices.last().copied() {
+                bid_map.retain(|_, bid| bid.price >= min_price);
+            }
         }
 
         drop(bid_map);
@@ -103,13 +105,15 @@ impl OrderBook for HashMapOrderBook {
         }
 
         // Trim to max depth by removing highest prices
-        if ask_map.len() > max_depth {
+        if max_depth == 0 {
+            ask_map.clear();
+        } else if ask_map.len() > max_depth {
             let mut prices: Vec<f64> = ask_map.values().map(|a| a.price).collect();
             prices.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
             prices.truncate(max_depth);
-            let max_price = prices.last().copied().unwrap_or(f64::MAX);
-
-            ask_map.retain(|_, ask| ask.price <= max_price);
+            if let Some(max_price) = prices.last().copied() {
+                ask_map.retain(|_, ask| ask.price <= max_price);
+            }
         }
 
         drop(ask_map);
