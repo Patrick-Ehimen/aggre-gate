@@ -37,7 +37,7 @@ pub mod btree_set;
 pub mod hashmap;
 pub mod rb_tree;
 
-use aggregator_core::{Ask, Bid, PriceLevel, Result};
+use aggregator_core::{Ask, Bid};
 use async_trait::async_trait;
 
 /// Core trait for order book implementations
