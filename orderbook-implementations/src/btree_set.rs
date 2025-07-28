@@ -331,12 +331,12 @@ impl BuySide for BTreeBidSide {
 }
 
 /// BTreeSet-based ask side implementation
-/// 
+///
 /// Provides ask-only operations on a BTreeSet-backed order book.
 /// This is useful when you only need to work with the sell side of the market.
-/// 
+///
 /// # Thread Safety
-/// 
+///
 /// Uses Arc<RwLock<>> for safe concurrent access across async tasks.
 #[derive(Debug, Clone)]
 pub struct BTreeAskSide {
@@ -346,13 +346,13 @@ pub struct BTreeAskSide {
 
 impl BTreeAskSide {
     /// Creates a new empty ask-side order book
-    /// 
+    ///
     /// # Returns
-    /// 
+    ///
     /// A new `BTreeAskSide` instance with no ask orders
     pub fn new() -> Self {
         Self {
-            asks: Arc<RwLock<BTreeSet<Ask>>>,
+            asks: Arc::new(RwLock::new(BTreeSet::new())),
         }
     }
 }
